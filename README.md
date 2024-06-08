@@ -14,12 +14,12 @@ The directory structure is as follows:
 
 ``` (Drawing)
 code (folder):
-    1. data (folder):
-        1. tcc_ceds_music.csv -> contains the music dataset
-    2. app.py -> main file to run
-    3. article_analysis.py -> analyses the content in the url given
-    4. music_analysis.py -> analyses the music from the kaggle dataset
-    5. recommender.py -> recommends the music
+    > data (folder):
+        > tcc_ceds_music.csv -> contains the music dataset
+    > app.py -> main file to run
+    > article_analysis.py -> analyses the content in the url given
+    > music_analysis.py -> analyses the music from the kaggle dataset
+    > recommender.py -> recommends the music
 ```
 
 The way we can use this is also as follows:
