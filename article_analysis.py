@@ -3,21 +3,18 @@ from nltk import ne_chunk, pos_tag, word_tokenize
 from nltk.tree import Tree
 import gensim
 from gensim import corpora
-from nltk.tokenize import word_tokenize
 from textblob import TextBlob
 from newspaper import Article
 from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
 from nltk.probability import FreqDist
 
+# Download required NLTK resources (download only once at the beginning)
+nltk.download('punkt', quiet=True)
+nltk.download('maxent_ne_chunker', quiet=True)
+nltk.download('words', quiet=True)
+nltk.download('averaged_perceptron_tagger', quiet=True)
+nltk.download('stopwords', quiet=True)
 
-# Download required NLTK resources
-nltk.download('punkt')
-nltk.download('maxent_ne_chunker')
-nltk.download('words')
-nltk.download('averaged_perceptron_tagger')
-# Download stopwords
-nltk.download('stopwords')
 
 def fetch_article_content(url):
     article = Article(url)
@@ -25,8 +22,21 @@ def fetch_article_content(url):
     article.parse()
     return article.text
 
-def sentiment_analysis(text):
-    return TextBlob(text).sentiment
+
+def preprocess_text(text):
+  """
+  Preprocesses text for analysis.
+
+  Args:
+      text: The text string to preprocess.
+
+  Returns:
+      A list of lemmatized tokens (words) with stop words removed.
+  """
+  tokens = word_tokenize(text.lower())
+  stop_words = set(stopwords.words('english'))
+  return [token for token in tokens if token.isalnum() and token not in stop_words]
+
 
 def extract_entities(text):
     tokens = word_tokenize(text)
@@ -42,36 +52,34 @@ def extract_entities(text):
     
     return entities
 
+
 def extract_keywords(text):
-    tokens = word_tokenize(text.lower())
-    stop_words = set(stopwords.words('english'))
-    filtered_tokens = [token for token in tokens if token.isalnum() and token not in stop_words]
-    
-    freq_dist = FreqDist(filtered_tokens)
+    """
+    Extracts top 10 keywords from preprocessed text.
+
+    Args:
+        text: The text string to extract keywords from.
+
+    Returns:
+        A list of the top 10 most frequent words.
+    """
+    preprocessed_text = preprocess_text(text)
+    freq_dist = FreqDist(preprocessed_text)
     return [word for word, freq in freq_dist.most_common(10)]
 
-def perform_topic_modeling(texts):
-    tokens = [word_tokenize(text.lower()) for text in texts]
-    stop_words = set(stopwords.words('english'))
-    filtered_tokens = [[token for token in token_list if token.isalnum() and token not in stop_words] for token_list in tokens]
+
+# Performs topic modeling on a single document using LDA.
+def perform_topic_modeling(text):
+    preprocessed_text = [preprocess_text(text)]  # Convert text to a list for LDA
+    dictionary = corpora.Dictionary(preprocessed_text)
+    corpus = [dictionary.doc2bow(doc) for doc in preprocessed_text]
     
-    dictionary = corpora.Dictionary(filtered_tokens)
-    corpus = [dictionary.doc2bow(token_list) for token_list in filtered_tokens]
-    
-    lda_model = gensim.models.LdaModel(corpus, num_topics=5, id2word=dictionary, passes=15)
+    lda_model = gensim.models.LdaModel(corpus, num_topics=1, id2word=dictionary, passes=15)
+    return lda_model.print_topics(num_words=5)[0]  # Access topic info for the single document
 
-    return lda_model.print_topics(num_words=5)
-
-def extract_themes(text):
-    entities = extract_entities(text)
-    keywords = extract_keywords(text)
-    topics = perform_topic_modeling([text])
-
-    return topics
-
+# analyses the article based on url atm and then returns the sentiment score, content and themes
 def relevant_info(url):
     content = fetch_article_content(url)
-    sentiments = sentiment_analysis(content)
-    themes = extract_themes(content)
+    sentiments = TextBlob(content).sentiment
+    themes = perform_topic_modeling(content)
     return sentiments, content, themes
-    
