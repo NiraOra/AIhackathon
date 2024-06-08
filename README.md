@@ -1,3 +1,8 @@
 # AI hackthon deets
 
-- will have specs + explanation of code here (which can be used for video breakdown)
+Specs: Music recommendation based on Article reading at that point in time
+
+Why better for the world ?
+
+- Better focus -> something that I have really struggles with
+- etc etc
