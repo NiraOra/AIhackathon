@@ -1,11 +1,21 @@
 import pandas as pd
-import julep
-import requests
+# import julep
 from textblob import TextBlob
-from julep import AsyncClient
+# from julep import AsyncClient
 # -> later used for data extraction from websites
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+from newspaper import Article
+
+# Getting the article Content using the URL
+def fetch_article_content(url):
+    article = Article(url)
+    article.download()
+    article.parse()
+    return article.text
+
+def sentiment_analysis(text):
+    return TextBlob(text).sentiment
 
 # # using Julep AI
 # JULEP_API_KEY = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NTcyM2I5Yy04MTgxLTQwOTMtODhhMC1hMjE2NzdhYWFjNzYiLCJlbWFpbCI6Im5pcmFhcnVubWVub25AZ21haWwuY29tIiwiaWF0IjoxNzE3ODIwMzIyLCJleHBpcmVzSW4iOiIxeSIsInJhdGVMaW1pdFBlck1pbnV0ZSI6MzUwMCwicXVvdGFSZXNldCI6IjFoIiwiY2xpZW50RW52aXJvbm1lbnQiOiJzZXJ2ZXIiLCJzZXJ2ZXJFbnZpcm9ubWVudCI6InByb2R1Y3Rpb24iLCJ2ZXJzaW9uIjoidjAuMiIsImV4cCI6MTc0OTM3NzkyMn0._JIGxAoEiZ7VpypUcGLbClSVumwK_mumRBJ_eitfwaCQzY-V9_bkIkh_HkjRd7KV6SHNiIWQRjckWGCa5OWtIA"
@@ -13,9 +23,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 # client = AsyncClient(api_key=JULEP_API_KEY, base_url=JULEP_BASE_URL)
 
-# # sample dataset from kaggle for now
-example = requests.get("https://www.goodnewsnetwork.org/stork-that-went-extinct-in-the-uk-600-years-ago-is-spotted-in-the-english-skies-it-was-a-great-sign/")
-print(example)
+# sample dataset from kaggle for now
 
 # # Fetch and preprocess article data
 response_articles = pd.read_csv('data/Articles.csv') # taken from https://www.kaggle.com/datasets/dorianlazar/medium-articles-dataset
@@ -36,9 +44,9 @@ music_sentiment = [
 ]
 
 
-# # # to extract content from website
-# # for url in urls:
-# #     print(requests.get(urls).text)
+# to extract content from website
+# for url in urls:
+#     print(requests.get(urls).text)
 
 # # Combine article and music data into one corpus
 combined_data = pd.concat([articles['Article'], music_tracks['track_name']], ignore_index=True)
@@ -47,10 +55,10 @@ combined_data = pd.concat([articles['Article'], music_tracks['track_name']], ign
 tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(combined_data)
 
-# # Compute cosine similarity for the combined data
+# Compute cosine similarity for the combined data
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-# # Function to get music recommendations based on an article
+# Function to get music recommendations based on an article
 def get_music_recommendations(article_title, cosine_sim=cosine_sim):
     article_idx = articles[articles['Article'] == article_title].index[0]
     # music data starts after articles in combined data
@@ -64,17 +72,8 @@ def get_music_recommendations(article_title, cosine_sim=cosine_sim):
 # to take care: OFFENSIVE MUSIC TO NOT BE ALLOWED
 # includes: racist songs, NSFW or explicit
 
-recommendations = get_music_recommendations(articles['Article'][2])
-print(f"For title: {articles['Article'][2]}, we ended up getting the following recommendations: {recommendations}")
-
-# # app = Flask(__name__)
-
-# # @app.route('/recommend', methods=['GET'])
-# # def recommend():
-# #     title = request.args.get('title')
-# #     recommendations = get_music_recommendations(title)
-# #     return jsonify(recommendations.tolist())
-
-# # if __name__ == '__main__':
-# #     app.run(debug=True)
+# recommendations = get_music_recommendations(articles['Article'][2])
+# print(f"For title: {articles['Article'][2]}, we ended up getting the following recommendations: {recommendations}")
+example = fetch_article_content("https://www.opencolleges.edu.au/blogs/articles/our-best-ever-study-playlist")
+print(sentiment_analysis(example))
 
