@@ -1,6 +1,6 @@
 # BuildClub AI Hackathon - Music for Reading
 
-Idea: Music recommendation based on Article reading at that point in time
+> Idea: Music recommendation based on Article reading at that point in time
 
 ## Background
 
@@ -31,4 +31,6 @@ The way we can use this is also as follows:
 
 ## Future
 
-In the future, I would like to develop this into an extension so that people do not need to input an article into the chatbot and can instead access the website directly. I was not able to do this on time, so I would like to put it out here.
+In the future, I would like to develop this into an extension so that people do not need to input an article into the chatbot and can instead access the website directly.
+
+I would also like to implement semantic routing to filter any explicit content mentioned within the article and anything that is specifically racist/politically influential.
