@@ -18,7 +18,7 @@ example = "https://www.opencolleges.edu.au/blogs/articles/our-best-ever-study-pl
 example_sad = "https://au.finance.yahoo.com/news/sad-reality-aussie-workforce-043318613.html"
 example_ok = "https://7news.com.au/sport/afl/afl-coach-simon-goodwin-makes-sad-admission-about-relentless-media-attack-c-14953976"
 # getting the music that was recommended based on the url
-music = recommender.recommend_music(example_ok)
+music = recommender.recommend_music(example)
 # TODO: printing out the results
 print(music)
 
