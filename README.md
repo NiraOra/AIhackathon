@@ -1,6 +1,6 @@
 # BuildClub AI Hackathon - Music for Reading
 
-> Idea: Music recommendation based on Article reading at that point in time
+> Idea: A music recommendation system for an article a user is reading at that point in time.
 
 ## Background
 
