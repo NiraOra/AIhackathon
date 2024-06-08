@@ -1,23 +1,19 @@
-# import julep
-from julep import AsyncClient
 from julep import Client
 from dotenv import load_dotenv
 import os
-# -> later used for data extraction from websites
 import recommender as recommender
 
 # All the Julep AI stuff taken from julep ai website
-
 load_dotenv()
 
 # USING Julep AI
-
 # Setting up clients
 JULEP_API_KEY = "eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3NTcyM2I5Yy04MTgxLTQwOTMtODhhMC1hMjE2NzdhYWFjNzYiLCJlbWFpbCI6Im5pcmFhcnVubWVub25AZ21haWwuY29tIiwiaWF0IjoxNzE3ODIwMzIyLCJleHBpcmVzSW4iOiIxeSIsInJhdGVMaW1pdFBlck1pbnV0ZSI6MzUwMCwicXVvdGFSZXNldCI6IjFoIiwiY2xpZW50RW52aXJvbm1lbnQiOiJzZXJ2ZXIiLCJzZXJ2ZXJFbnZpcm9ubWVudCI6InByb2R1Y3Rpb24iLCJ2ZXJzaW9uIjoidjAuMiIsImV4cCI6MTc0OTM3NzkyMn0._JIGxAoEiZ7VpypUcGLbClSVumwK_mumRBJ_eitfwaCQzY-V9_bkIkh_HkjRd7KV6SHNiIWQRjckWGCa5OWtIA"
 # JULEP_BASE_URL = "https://dev.julep.ai/api"
 
 client = Client(api_key=JULEP_API_KEY)
 
+# The prompt for Julep AI
 SITUATION_PROMPT = """
 You are DeVsMond, a very talented chatbot that has access to a dataframe of music.
 You extract the content within the url and make sure to recommend 5 extremely relevant music for user satisfaction.
@@ -33,12 +29,23 @@ INSTRUCTIONS = [
     "MAKE SURE that the user provides a valid url."
 ]
 
+# This is to print out th recommendations in a way that is easy to read
 def pretty_print(recommendations):
     print("Here are some music recommendations for the article:")
     for (name, song, _) in recommendations:
-        print(f"{name} - {song}")
+        print(f"\t{name} - {song}")
     print("Hope you enjoyed these recommendations!")
+    
+# Analysing the article first
+example = "https://www.opencolleges.edu.au/blogs/articles/our-best-ever-study-playlist"
+example_sad = "https://au.finance.yahoo.com/news/sad-reality-aussie-workforce-043318613.html"
+example_ok = "https://7news.com.au/sport/afl/afl-coach-simon-goodwin-makes-sad-admission-about-relentless-media-attack-c-14953976"
+# getting the music that was recommended based on the url
+music = recommender.recommend_music(example_ok)
+# printing out the results
+pretty_print(music)
 
+#TODO: JULEPAI
 # to make sure it is a valid url
 # def get_user_input():
 #   """Prompts the user for an article URL and returns it."""
@@ -53,7 +60,7 @@ def pretty_print(recommendations):
 
 
 
-# # recommendation
+# recommendation
 # def rec(url: str):
 #     return recommender.recommend_music(url)
 
@@ -189,16 +196,5 @@ def pretty_print(recommendations):
 # )
 
 
-# to take care: OFFENSIVE MUSIC TO NOT BE ALLOWED
-# includes: racist songs, NSFW or explicit
-
-# # Analysing the article first
-example = "https://www.opencolleges.edu.au/blogs/articles/our-best-ever-study-playlist"
-example_sad = "https://au.finance.yahoo.com/news/sad-reality-aussie-workforce-043318613.html"
-example_ok = "https://7news.com.au/sport/afl/afl-coach-simon-goodwin-makes-sad-admission-about-relentless-media-attack-c-14953976"
-# getting the music that was recommended based on the url
-music = recommender.recommend_music(example)
-# TODO: printing out the results
-pretty_print(music)
 
 
