@@ -2,6 +2,12 @@
 
 > Idea: A music recommendation system for an article a user is reading at that point in time.
 
+## REVISION DOCS
+
+1. 08-06-2024: Tried with Julep AI
+2. 09-06-2024: Added simple gradio chatbot; can now use it to ask the music recommendations by passing in the url
+
+
 ## Background
 
 As a University student studying in my third year, I have come across many articles throughout my life which I have read with my music most of the time. As an avid lover of music, I tend to focus more when there is something playing in the background as I love multitasking. However, sometimes I found that the music that I play through `Spotify` may not apt for a news article or a research paper I am reading, for example. Imagine playing an upbeat pop song over an article that mourns the death of a lover!
@@ -24,7 +30,7 @@ code (folder):
 
 The way we can use this is also as follows:
 
-1. Using `Julep.AI`, I implemented a simple chatbot that simply asks the user to input any article that they would like me to recommend their music for.
+1. Using `gradio`, I implemented a simple chatbot that simply asks the user to input any article that they would like me to recommend their music for.
 2. Then, using `pandas`, `nltk` and `TextBlob`, I perform a sentiment analysis on the content that the article provides me. As a tip, I also take the regex etc into account because if it consists of emojis then I would like it to be counted towards the sentiment analysis (to determine polarity).
 3. Then, using `scikit TfidfVectorizer`, I convert the content into a tf-idf vector so I can begin my search through similarity scores and sentiment analysis, comparing the scores for both the music and the article and gauging which similarity score ends up benefitting us.
 4. After the search, I end up returning a list of music that could be listened to while reading said article.
